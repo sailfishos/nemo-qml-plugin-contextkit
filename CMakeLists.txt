@@ -25,3 +25,5 @@ link_directories(
   ${QT_LIBRARY_DIR}
   ${CONTEXTSUBSCRIBER_LIBRARY_DIRS}
 )
+
+add_subdirectory("src")

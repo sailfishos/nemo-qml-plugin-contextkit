@@ -1,0 +1,13 @@
+ContextKit QML bindings
+
+Usage:
+
+# some.qml
+...
+import org.freedesktop.contextkit 1.0
+...
+ContextProperty {
+   key: "keyname"
+   value: default_value_before_update
+}
+...

@@ -41,4 +41,4 @@ public:
 
 }
 
-Q_EXPORT_PLUGIN2(ContextKit, ContextKitQml::Plugin);
+Q_EXPORT_PLUGIN2(org.freedesktop.contextkit, ContextKitQml::Plugin);

@@ -28,7 +28,9 @@
 namespace ContextKitQml
 {
 
-Property::Property(QObject *parent) : QObject(parent)
+Property::Property(QObject *parent) :
+        QObject(parent),
+        subscribed(true)
 {
 }
 
@@ -44,6 +46,8 @@ QString Property::key() const
 void Property::setKey(QString const &key)
 {
         prop.reset(new ContextProperty(key));
+        if (!subscribed)
+                prop->unsubscribe();
         connect(prop.data(), SIGNAL(valueChanged()),
                 SIGNAL(valueChanged()));
 }
@@ -53,16 +57,33 @@ void Property::setDefaultValue(QVariant const &value)
         default_value = value;
 }
 
-void Property::subscribe() const
+bool Property::isSubscribed() const
 {
-        if (prop)
-                prop->subscribe();
+        return subscribed;
 }
 
-void Property::unsubscribe() const
+void Property::setSubscribed(bool subscribed)
 {
-        if (prop)
-                prop->unsubscribe();
+        if (subscribed != this->subscribed) {
+                if (prop) {
+                        if (subscribed)
+                                prop->subscribe();
+                        else
+                                prop->unsubscribe();
+                }
+                this->subscribed = subscribed;
+                emit subscribedChanged();
+        }
+}
+
+void Property::subscribe()
+{
+        setSubscribed(true);
+}
+
+void Property::unsubscribe()
+{
+        setSubscribed(false);
 }
 
 QVariant Property::value() const

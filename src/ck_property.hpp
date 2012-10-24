@@ -40,6 +40,7 @@ class Property : public QObject
         Q_PROPERTY(QString key READ key WRITE setKey);
         Q_PROPERTY(QVariant value READ value WRITE setDefaultValue
                    NOTIFY valueChanged);
+        Q_PROPERTY(bool subscribed READ isSubscribed WRITE setSubscribed NOTIFY subscribedChanged)
         Q_CLASSINFO("DefaultProperty", "value");
 public:
         Property(QObject *parent = 0);
@@ -51,15 +52,19 @@ public:
         QVariant value() const;
         void setDefaultValue(QVariant const &);
 
-        Q_INVOKABLE void subscribe() const;
-        Q_INVOKABLE void unsubscribe() const;
+        bool isSubscribed() const;
+        void setSubscribed(bool subscribed);
+        Q_INVOKABLE void subscribe();
+        Q_INVOKABLE void unsubscribe();
 
 signals:
         void valueChanged();
+        void subscribedChanged();
 
 private:
         QScopedPointer<ContextProperty> prop;
         QVariant default_value;
+        bool subscribed;
 };
 
 }

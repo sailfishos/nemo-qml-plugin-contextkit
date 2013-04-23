@@ -1,3 +1,6 @@
+find_package(PkgConfig)
+pkg_check_modules(STATEFS contextkit-statefs REQUIRED)
+
 set(NAME contextkit)
 set(QMLPKG org/freedesktop/contextkit)
 set(SRC plugin.cpp ck_property.cpp)
@@ -12,7 +15,7 @@ add_library(${NAME} MODULE ${SRC} ${MOC_SRC})
 target_link_libraries(${NAME}
   ${QT_QTCORE_LIBRARY}
   ${QT_DECLARATIVE_LIBRARY}
-  ${CONTEXTSUBSCRIBER_LIBRARIES}
+  ${STATEFS_LIBRARIES}
   )
 
 install(TARGETS ${NAME} DESTINATION lib/qt4/imports/${QMLPKG})

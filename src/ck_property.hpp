@@ -36,35 +36,35 @@ namespace ContextKitQml
 
 class Property : public QObject
 {
-        Q_OBJECT;
-        Q_PROPERTY(QString key READ key WRITE setKey);
-        Q_PROPERTY(QVariant value READ value WRITE setDefaultValue
-                   NOTIFY valueChanged);
-        Q_PROPERTY(bool subscribed READ isSubscribed WRITE setSubscribed NOTIFY subscribedChanged)
-        Q_CLASSINFO("DefaultProperty", "value");
+    Q_OBJECT;
+    Q_PROPERTY(QString key READ key WRITE setKey);
+    Q_PROPERTY(QVariant value READ value WRITE setDefaultValue
+               NOTIFY valueChanged);
+    Q_PROPERTY(bool subscribed READ isSubscribed WRITE setSubscribed NOTIFY subscribedChanged)
+    Q_CLASSINFO("DefaultProperty", "value");
 public:
-        Property(QObject *parent = 0);
-        ~Property();
+    Property(QObject* parent = 0);
+    ~Property();
 
-        QString key() const;
-        void setKey(QString const &);
+    QString key() const;
+    void setKey(QString const&);
 
-        QVariant value() const;
-        void setDefaultValue(QVariant const &);
+    QVariant value() const;
+    void setDefaultValue(QVariant const&);
 
-        bool isSubscribed() const;
-        void setSubscribed(bool subscribed);
-        Q_INVOKABLE void subscribe();
-        Q_INVOKABLE void unsubscribe();
+    bool isSubscribed() const;
+    void setSubscribed(bool subscribed);
+    Q_INVOKABLE void subscribe();
+    Q_INVOKABLE void unsubscribe();
 
 signals:
-        void valueChanged();
-        void subscribedChanged();
+    void valueChanged();
+    void subscribedChanged();
 
 private:
-        QScopedPointer<ContextProperty> prop;
-        QVariant default_value;
-        bool subscribed;
+    QScopedPointer<ContextProperty> prop;
+    QVariant default_value;
+    bool subscribed;
 };
 
 }

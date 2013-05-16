@@ -36,8 +36,7 @@ class Plugin : public QQmlExtensionPlugin
 {
     Q_PLUGIN_METADATA(IID #MY_PLUGIN_NS)
 public:
-    void registerTypes(char const *uri)
-    {
+    void registerTypes(char const* uri) {
         qmlRegisterType<Property>(uri, 1, 0, "ContextProperty");
     }
 };

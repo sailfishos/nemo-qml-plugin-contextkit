@@ -28,9 +28,9 @@
 namespace ContextKitQml
 {
 
-Property::Property(QObject *parent) :
-        QObject(parent),
-        subscribed(true)
+Property::Property(QObject* parent) :
+    QObject(parent),
+    subscribed(true)
 {
 }
 
@@ -40,55 +40,58 @@ Property::~Property()
 
 QString Property::key() const
 {
-        return prop ? prop->key() : QString("");
+    return prop ? prop->key() : QString("");
 }
 
-void Property::setKey(QString const &key)
+void Property::setKey(QString const& key)
 {
-        prop.reset(new ContextProperty(key));
-        if (!subscribed)
-                prop->unsubscribe();
-        connect(prop.data(), SIGNAL(valueChanged()),
-                SIGNAL(valueChanged()));
+    prop.reset(new ContextProperty(key));
+
+    if (!subscribed)
+    { prop->unsubscribe(); }
+
+    connect(prop.data(), SIGNAL(valueChanged()),
+            SIGNAL(valueChanged()));
 }
 
-void Property::setDefaultValue(QVariant const &value)
+void Property::setDefaultValue(QVariant const& value)
 {
-        default_value = value;
+    default_value = value;
 }
 
 bool Property::isSubscribed() const
 {
-        return subscribed;
+    return subscribed;
 }
 
 void Property::setSubscribed(bool subscribed)
 {
-        if (subscribed != this->subscribed) {
-                if (prop) {
-                        if (subscribed)
-                                prop->subscribe();
-                        else
-                                prop->unsubscribe();
-                }
-                this->subscribed = subscribed;
-                emit subscribedChanged();
+    if (subscribed != this->subscribed) {
+        if (prop) {
+            if (subscribed)
+            { prop->subscribe(); }
+            else
+            { prop->unsubscribe(); }
         }
+
+        this->subscribed = subscribed;
+        emit subscribedChanged();
+    }
 }
 
 void Property::subscribe()
 {
-        setSubscribed(true);
+    setSubscribed(true);
 }
 
 void Property::unsubscribe()
 {
-        setSubscribed(false);
+    setSubscribed(false);
 }
 
 QVariant Property::value() const
 {
-        return prop ? prop->value(default_value) : default_value;
+    return prop ? prop->value(default_value) : default_value;
 }
 
 }

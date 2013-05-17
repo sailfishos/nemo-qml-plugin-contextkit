@@ -23,16 +23,14 @@ link_directories(
   ${CONTEXTSUBSCRIBER_LIBRARY_DIRS}
 )
 
-set(CMAKE_AUTOMOC TRUE)
-
 #-Wno-psabi is to remove next g++ warning/note:
 #the mangling of 'va_list' has changed in GCC 4.4
 set(CMAKE_CXX_FLAGS
   "${CMAKE_CXX_FLAGS} -fPIC -W -Wall -Wextra -Werror -Wno-psabi -g -O2")
 
+qt4_wrap_cpp(MOC_SRC plugin.cpp ck_property.hpp)
 set(SRC plugin.cpp ck_property.cpp)
-set(HDRS ck_property.hpp)
-add_library(${NAME} MODULE ${SRC})
+add_library(${NAME} MODULE ${SRC} ${MOC_SRC})
 
 target_link_libraries(${NAME}
   ${QT_QTCORE_LIBRARY}
@@ -46,6 +44,10 @@ install(FILES qmldir DESTINATION lib/qt4/imports/${QMLPKG})
 elseif(${USEQT} STREQUAL "5")
 
 set(NAME contextkit-qt5)
+
+if(Qt5_POSITION_INDEPENDENT_CODE)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(STATEFS contextkit-statefs REQUIRED)
@@ -74,8 +76,8 @@ set(CMAKE_CXX_FLAGS
   "${CMAKE_CXX_FLAGS} -fPIC -W -Wall -Wextra -Werror -Wno-psabi -g -O2")
 
 set(SRC plugin-qt5.cpp ck_property.cpp)
-set(HDRS ck_property.hpp)
-add_library(${NAME} MODULE ${SRC})
+qt5_wrap_cpp(MOC_SRC plugin-qt5.hpp ck_property.hpp)
+add_library(${NAME} MODULE ${SRC} ${MOC_SRC})
 
 target_link_libraries(${NAME}
   ${Qt5Core_LIBRARIES}

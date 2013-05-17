@@ -22,21 +22,16 @@
  * http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 
+#include "plugin-qt5.hpp"
 #include "ck_property.hpp"
 
-#include <QtQml/QQmlExtensionPlugin>
 #include <qqml.h>
 
 namespace ContextKitQml
 {
 
-class Plugin : public QQmlExtensionPlugin
-{
-    Q_PLUGIN_METADATA(IID "org.freedesktop.contextkit")
-public:
-    void registerTypes(char const* uri) {
-        qmlRegisterType<Property>(uri, 1, 0, "ContextProperty");
-    }
-};
+void Plugin::registerTypes(char const* uri) {
+    qmlRegisterType<Property>(uri, 1, 0, "ContextProperty");
+}
 
 }

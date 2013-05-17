@@ -49,5 +49,5 @@ make install DESTDIR=%{buildroot}
 
 %files -n nemo-qml-plugin-contextkit-qt5
 %defattr(-,root,root,-)
-%{_libdir}/qt5/imports/org/freedesktop/contextkit/libcontextkit.so
-%{_libdir}/qt5/imports/org/freedesktop/contextkit/qmldir
+%{_libdir}/qt5/qml/org/freedesktop/contextkit/libcontextkit.so
+%{_libdir}/qt5/qml/org/freedesktop/contextkit/qmldir

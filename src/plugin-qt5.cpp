@@ -30,11 +30,9 @@
 namespace ContextKitQml
 {
 
-#define MY_PLUGIN_NS org.freedesktop.contextkit
-
 class Plugin : public QQmlExtensionPlugin
 {
-    Q_PLUGIN_METADATA(IID #MY_PLUGIN_NS)
+    Q_PLUGIN_METADATA(IID "org.freedesktop.contextkit")
 public:
     void registerTypes(char const* uri) {
         qmlRegisterType<Property>(uri, 1, 0, "ContextProperty");

@@ -11,6 +11,7 @@ include_directories(${QT_INCLUDE_DIR})
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(STATEFS contextkit-statefs-qt4 REQUIRED)
+pkg_check_modules(CONTEXTSUBSCRIBER contextsubscriber-1.0)
 
 include_directories(
   ${QT_INCLUDE_DIR}

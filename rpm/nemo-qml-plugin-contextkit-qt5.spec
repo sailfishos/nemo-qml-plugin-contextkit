@@ -6,6 +6,7 @@ License: LGPLv2
 Group: Applications/System
 URL: https://github.com/nemomobile/nemo-qml-plugin-contextkit
 Source0: %{name}-%{version}.tar.bz2
+BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Qml)
 BuildRequires: pkgconfig(contextkit-statefs)
 BuildRequires: cmake >= 2.8

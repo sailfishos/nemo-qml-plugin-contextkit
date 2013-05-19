@@ -10,6 +10,7 @@ BuildRequires: pkgconfig(QtCore)
 BuildRequires: pkgconfig(QtDeclarative)
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(contextkit-statefs-qt4)
+BuildRequires: pkgconfig(contextsubscriber-1.0) >= 0.5.25
 BuildRequires: cmake >= 2.8
 
 %description

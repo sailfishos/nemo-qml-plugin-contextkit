@@ -1,15 +1,13 @@
 Summary: ContextKit QML bindings
-Name: nemo-qml-plugin-contextkit
+Name: nemo-qml-plugin-contextkit-qt5
 Version: 1.1
 Release: 2
 License: LGPLv2
 Group: Applications/System
 URL: https://github.com/nemomobile/nemo-qml-plugin-contextkit
 Source0: %{name}-%{version}.tar.bz2
-BuildRequires: pkgconfig(QtCore)
-BuildRequires: pkgconfig(QtDeclarative)
-BuildRequires: pkgconfig(Qt5Core)
-BuildRequires: pkgconfig(contextkit-statefs-qt4)
+BuildRequires: pkgconfig(Qt5Qml)
+BuildRequires: pkgconfig(contextkit-statefs)
 BuildRequires: cmake >= 2.8
 
 %description
@@ -19,15 +17,15 @@ BuildRequires: cmake >= 2.8
 %setup -q -n %{name}-%{version}
 
 %build
-%cmake -DUSEQT=4
+%cmake -DUSEQT=5
 make %{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
-%cmake -DUSEQT=4
+%cmake -DUSEQT=5
 make install DESTDIR=%{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{_libdir}/qt4/imports/org/freedesktop/contextkit/libcontextkit.so
-%{_libdir}/qt4/imports/org/freedesktop/contextkit/qmldir
+%{_libdir}/qt5/qml/org/freedesktop/contextkit/libcontextkit.so
+%{_libdir}/qt5/qml/org/freedesktop/contextkit/qmldir

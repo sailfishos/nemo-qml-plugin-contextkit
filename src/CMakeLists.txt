@@ -85,7 +85,7 @@ target_link_libraries(${NAME}
   ${STATEFS_LIBRARIES}
   )
 
-install(PROGRAMS libcontextkit-qt5.so DESTINATION lib/qt5/imports/${QMLPKG} RENAME libcontextkit.so)
-install(FILES qmldir DESTINATION lib/qt5/imports/${QMLPKG})
+install(PROGRAMS libcontextkit-qt5.so DESTINATION lib/qt5/qml/${QMLPKG} RENAME libcontextkit.so)
+install(FILES qmldir DESTINATION lib/qt5/qml/${QMLPKG})
 
 endif(${USEQT} STREQUAL "4")

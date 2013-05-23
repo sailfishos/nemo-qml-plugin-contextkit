@@ -11,6 +11,7 @@ BuildRequires: pkgconfig(QtDeclarative)
 BuildRequires: pkgconfig(contextkit-statefs-qt4)
 BuildRequires: pkgconfig(contextsubscriber-1.0) >= 0.5.25
 BuildRequires: cmake >= 2.8
+Requires: statefs-contextkit-provider
 
 %description
 %{summary}

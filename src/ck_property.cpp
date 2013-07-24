@@ -52,6 +52,7 @@ void Property::setKey(QString const& key)
 
     connect(prop.data(), SIGNAL(valueChanged()),
             SIGNAL(valueChanged()));
+    emit valueChanged();
 }
 
 void Property::setDefaultValue(QVariant const& value)

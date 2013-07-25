@@ -1,9 +1,50 @@
 set(QMLPKG org/freedesktop/contextkit)
 
+if(${USEQT} STREQUAL "4")
+
 set(NAME contextkit)
 
+find_package(Qt4 4.7.0 REQUIRED)
+include(${QT_USE_FILE})
 add_definitions(-DQT_SHARED)
-set(CMAKE_AUTOMOC TRUE)
+include_directories(${QT_INCLUDE_DIR})
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(STATEFS contextkit-statefs-qt4 REQUIRED)
+pkg_check_modules(CONTEXTSUBSCRIBER contextsubscriber-1.0)
+
+include_directories(
+  ${QT_INCLUDE_DIR}
+  ${QT_QTDECLARATIVE_INCLUDE_DIR}
+  ${CONTEXTSUBSCRIBER_INCLUDE_DIRS}
+)
+
+link_directories(
+  ${QT_LIBRARY_DIR}
+  ${CONTEXTSUBSCRIBER_LIBRARY_DIRS}
+)
+
+#-Wno-psabi is to remove next g++ warning/note:
+#the mangling of 'va_list' has changed in GCC 4.4
+set(CMAKE_CXX_FLAGS
+  "${CMAKE_CXX_FLAGS} -fPIC -W -Wall -Wextra -Werror -Wno-psabi -g -O2")
+
+qt4_wrap_cpp(MOC_SRC plugin.cpp ck_property.hpp)
+set(SRC plugin.cpp ck_property.cpp)
+add_library(${NAME} MODULE ${SRC} ${MOC_SRC})
+
+target_link_libraries(${NAME}
+  ${QT_QTCORE_LIBRARY}
+  ${QT_DECLARATIVE_LIBRARY}
+  ${STATEFS_LIBRARIES}
+  )
+
+install(TARGETS ${NAME} DESTINATION lib/qt4/imports/${QMLPKG})
+install(FILES qmldir DESTINATION lib/qt4/imports/${QMLPKG})
+
+elseif(${USEQT} STREQUAL "5")
+
+set(NAME contextkit)
 
 if(Qt5_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -36,6 +77,7 @@ set(CMAKE_CXX_FLAGS
   "${CMAKE_CXX_FLAGS} -fPIC -W -Wall -Wextra -Werror -Wno-psabi -g -O2")
 
 set(SRC plugin-qt5.cpp ck_property.cpp)
+qt5_wrap_cpp(MOC_SRC plugin-qt5.hpp ck_property.hpp)
 add_library(${NAME} MODULE ${SRC} ${MOC_SRC})
 
 target_link_libraries(${NAME}
@@ -46,3 +88,5 @@ target_link_libraries(${NAME}
 
 install(PROGRAMS libcontextkit.so DESTINATION lib/qt5/qml/${QMLPKG})
 install(FILES qmldir DESTINATION lib/qt5/qml/${QMLPKG})
+
+endif(${USEQT} STREQUAL "4")

@@ -1,5 +1,11 @@
 set(QMLPKG org/freedesktop/contextkit)
 
+#-Wno-psabi is to remove next g++ warning/note:
+#the mangling of 'va_list' has changed in GCC 4.4
+set(CMAKE_CXX_FLAGS
+  "${CMAKE_CXX_FLAGS} -fPIC -W -Wall -Wextra -Werror -Wno-psabi -g -O2 -std=c++0x")
+
+
 if(${USEQT} STREQUAL "4")
 
 set(NAME contextkit)
@@ -23,11 +29,6 @@ link_directories(
   ${QT_LIBRARY_DIR}
   ${CONTEXTSUBSCRIBER_LIBRARY_DIRS}
 )
-
-#-Wno-psabi is to remove next g++ warning/note:
-#the mangling of 'va_list' has changed in GCC 4.4
-set(CMAKE_CXX_FLAGS
-  "${CMAKE_CXX_FLAGS} -fPIC -W -Wall -Wextra -Werror -Wno-psabi -g -O2")
 
 qt4_wrap_cpp(MOC_SRC plugin.cpp ck_property.hpp)
 set(SRC plugin.cpp ck_property.cpp)
@@ -70,11 +71,6 @@ link_directories(
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STATEFS_CFLAGS}")
-
-#-Wno-psabi is to remove next g++ warning/note:
-#the mangling of 'va_list' has changed in GCC 4.4
-set(CMAKE_CXX_FLAGS
-  "${CMAKE_CXX_FLAGS} -fPIC -W -Wall -Wextra -Werror -Wno-psabi -g -O2")
 
 set(SRC plugin-qt5.cpp ck_property.cpp)
 qt5_wrap_cpp(MOC_SRC plugin-qt5.hpp ck_property.hpp)

@@ -45,14 +45,17 @@ QString Property::key() const
 
 void Property::setKey(QString const& key)
 {
-    prop.reset(new ContextProperty(key));
+    if (!prop || prop->key() != key)
+        prop.reset(new ContextProperty(key));
 
     if (!subscribed)
-    { prop->unsubscribe(); }
+        prop->unsubscribe();
 
     connect(prop.data(), SIGNAL(valueChanged()),
             SIGNAL(valueChanged()));
-    emit valueChanged();
+    auto v = value();
+    if (v != default_value)
+        emit valueChanged();
 }
 
 void Property::setDefaultValue(QVariant const& value)
@@ -70,9 +73,9 @@ void Property::setSubscribed(bool subscribed)
     if (subscribed != this->subscribed) {
         if (prop) {
             if (subscribed)
-            { prop->subscribe(); }
+                prop->subscribe();
             else
-            { prop->unsubscribe(); }
+                prop->unsubscribe();
         }
 
         this->subscribed = subscribed;
@@ -96,7 +99,7 @@ QVariant Property::value() const
         prop->waitForSubscription();
         return prop->value(default_value);
     } else {
-    return default_value;
+        return default_value;
     }
 }
 

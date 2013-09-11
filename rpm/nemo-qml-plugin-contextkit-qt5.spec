@@ -8,7 +8,7 @@ URL: https://github.com/nemomobile/nemo-qml-plugin-contextkit
 Source0: %{name}-%{version}.tar.bz2
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Qml)
-BuildRequires: pkgconfig(contextkit-statefs) >= 0.2.33
+BuildRequires: pkgconfig(contextkit-statefs) >= 0.2.34
 BuildRequires: cmake >= 2.8
 
 %description

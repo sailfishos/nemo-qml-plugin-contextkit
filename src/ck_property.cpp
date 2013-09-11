@@ -92,7 +92,12 @@ void Property::unsubscribe()
 
 QVariant Property::value() const
 {
-    return prop ? prop->value(default_value) : default_value;
+    if (prop) {
+        prop->waitForSubscription();
+        return prop->value(default_value);
+    } else {
+    return default_value;
+    }
 }
 
 }

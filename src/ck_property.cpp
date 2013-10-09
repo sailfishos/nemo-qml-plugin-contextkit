@@ -96,7 +96,7 @@ void Property::unsubscribe()
 QVariant Property::value() const
 {
     if (prop) {
-        prop->waitForSubscription();
+        //prop->waitForSubscription();
         return prop->value(default_value);
     } else {
         return default_value;

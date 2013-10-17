@@ -61,6 +61,9 @@ signals:
     void valueChanged();
     void subscribedChanged();
 
+private slots:
+    void onValueChanged();
+
 private:
     QScopedPointer<ContextProperty> prop;
     QVariant default_value;

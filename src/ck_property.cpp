@@ -43,6 +43,11 @@ QString Property::key() const
     return prop ? prop->key() : QString("");
 }
 
+void Property::onValueChanged()
+{
+    valueChanged();
+}
+
 void Property::setKey(QString const& key)
 {
     if (!prop || prop->key() != key)
@@ -51,8 +56,7 @@ void Property::setKey(QString const& key)
     if (!subscribed)
         prop->unsubscribe();
 
-    connect(prop.data(), SIGNAL(valueChanged()),
-            SIGNAL(valueChanged()));
+    connect(prop.data(), SIGNAL(valueChanged()), SLOT(onValueChanged()));
     auto v = value();
     if (v != default_value)
         emit valueChanged();
@@ -96,7 +100,7 @@ void Property::unsubscribe()
 QVariant Property::value() const
 {
     if (prop) {
-        prop->waitForSubscription();
+        //prop->waitForSubscription();
         return prop->value(default_value);
     } else {
         return default_value;

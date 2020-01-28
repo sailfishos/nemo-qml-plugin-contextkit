@@ -44,11 +44,9 @@ ContextPropertyBase {
         signalsEnabled: root.subscribed
         watchServiceStatus: root.subscribed
 
-        function profile_changed(arg, active, profileName) {
-            if (active) {
+        function profile_changed(arg, forActiveProfile, profileName) {
+            if (forActiveProfile) {
                 root._profileName = profileName
-            } else if (root._profileName == profileName) {
-                root._profileName = ""
             }
         }
 

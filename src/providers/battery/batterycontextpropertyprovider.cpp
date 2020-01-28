@@ -20,6 +20,7 @@
  */
 
 #include "batterycontextpropertyprovider.h"
+#include "provider_power_udev.h"
 
 #include <QFile>
 #include <QDir>
@@ -29,6 +30,7 @@
 
 BatteryContextPropertyProvider::BatteryContextPropertyProvider(QObject *parent)
     : QObject(parent)
+    , m_batteryInfo(new BatteryInfo(this))
     , m_poll(new QTimer(this))
 {
     m_poll->setInterval(1000);
@@ -39,7 +41,9 @@ BatteryContextPropertyProvider::BatteryContextPropertyProvider(QObject *parent)
         return;
     }
 
+    m_batteryDir = batteryDir;
     addDataType(Capacity, batteryDir + "/capacity", &BatteryContextPropertyProvider::capacityChanged);
+    addDataType(Charge, batteryDir + "/charge_now", &BatteryContextPropertyProvider::chargeChanged);
     addDataType(Current, batteryDir + "/current_now", &BatteryContextPropertyProvider::currentChanged);
     addDataType(Energy, batteryDir + "/energy_now", &BatteryContextPropertyProvider::energyChanged);
     addDataType(EnergyFull, batteryDir + "/energy_full", &BatteryContextPropertyProvider::energyFullChanged);
@@ -47,10 +51,18 @@ BatteryContextPropertyProvider::BatteryContextPropertyProvider(QObject *parent)
     addDataType(Voltage, batteryDir + "/voltage_now", &BatteryContextPropertyProvider::voltageChanged);
 
     if (!m_data.isEmpty()) {
-        timeout();  // get initial value
+        // setup initial values
+        updateData(true);
+        m_batteryInfo->setup();
+
         connect(m_poll, &QTimer::timeout, this, &BatteryContextPropertyProvider::timeout);
         m_poll->start();
     }
+}
+
+BatteryContextPropertyProvider::~BatteryContextPropertyProvider()
+{
+    delete m_batteryInfo;
 }
 
 void BatteryContextPropertyProvider::addDataType(BatteryDataType type,
@@ -75,10 +87,13 @@ bool BatteryContextPropertyProvider::active() const
 
 void BatteryContextPropertyProvider::setActive(bool active)
 {
-    if (active) {
-        m_poll->start();
-    } else {
-        m_poll->stop();
+    if (active != m_poll->isActive()) {
+        if (active) {
+            m_poll->start();
+        } else {
+            m_poll->stop();
+        }
+        emit activeChanged();
     }
 }
 
@@ -91,12 +106,18 @@ void BatteryContextPropertyProvider::setInterval(int interval)
 {
     if (m_poll->interval() != interval) {
         m_poll->setInterval(interval);
+        emit intervalChanged();
     }
 }
 
 long BatteryContextPropertyProvider::capacity() const
 {
     return m_data.value(Capacity).value;
+}
+
+long BatteryContextPropertyProvider::charge() const
+{
+    return m_data.value(Charge).value;
 }
 
 long BatteryContextPropertyProvider::current() const
@@ -106,17 +127,34 @@ long BatteryContextPropertyProvider::current() const
 
 long BatteryContextPropertyProvider::energy() const
 {
-    return m_data.value(Energy).value;
+    const auto it = m_data.find(Energy);
+    return (it != m_data.end()) ? it->value : m_batteryInfo->energy_now.last();
 }
 
 long BatteryContextPropertyProvider::energyFull() const
 {
-    return m_data.value(EnergyFull).value;
+    const auto it = m_data.find(EnergyFull);
+    return (it != m_data.end()) ? it->value : m_batteryInfo->energy_full();
+}
+
+long BatteryContextPropertyProvider::power() const
+{
+    return m_batteryInfo->power.last();
 }
 
 long BatteryContextPropertyProvider::temperature() const
 {
     return m_data.value(Temperature).value;
+}
+
+long BatteryContextPropertyProvider::timeUntilFull() const
+{
+    return m_batteryInfo->time_to_full.last();
+}
+
+long BatteryContextPropertyProvider::timeUntilLow() const
+{
+    return m_batteryInfo->time_to_low.last();
 }
 
 long BatteryContextPropertyProvider::voltage() const
@@ -126,28 +164,67 @@ long BatteryContextPropertyProvider::voltage() const
 
 long BatteryContextPropertyProvider::readLong(const QString &fileName, bool *ok)
 {
+    return readLine(fileName, ok).trimmed().toLong(ok);
+}
+
+QByteArray BatteryContextPropertyProvider::readLine(const QString &fileName, bool *ok)
+{
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qmlInfo(this) << "Cannot open" << fileName << file.errorString();
         if (ok) {
             *ok = false;
         }
-        return 0.0;
+        return QByteArray();
     }
-    return file.readLine().trimmed().toLong(ok);
+    return file.readLine();
+}
+
+QString BatteryContextPropertyProvider::filePathForBatteryData(const QString &name) const
+{
+    const QString path = m_batteryDir + '/' + name;
+    return QFile::exists(path) ? path : QString();
 }
 
 void BatteryContextPropertyProvider::timeout()
+{
+    updateData(false);
+}
+
+void BatteryContextPropertyProvider::updateData(bool isInitialUpdate)
 {
     for (auto it = m_data.begin(); it != m_data.end(); ++it) {
         BatteryData &batteryData = it.value();
         bool ok = false;
         long value = readLong(batteryData.filePath, &ok);
         if (ok) {
-            batteryData.value = value;
-            emit (this->*batteryData.notifySignal)();
+            if (batteryData.value != value) {
+                batteryData.value = value;
+                emit (this->*batteryData.notifySignal)();
+            }
         } else {
             qmlInfo(this) << "Unable to read data from:" << batteryData.filePath;
+        }
+    }
+
+    if (!isInitialUpdate) {
+        m_batteryInfo->calculate();
+
+        const auto it = m_data.find(Energy);
+        if (it == m_data.end()) {
+            if (m_batteryInfo->energy_now.last() != m_batteryInfo->energy_now.previous()) {
+                emit energyChanged();
+            }
+        }
+
+        if (m_batteryInfo->power.last() != m_batteryInfo->power.previous()) {
+            emit powerChanged();
+        }
+        if (m_batteryInfo->time_to_full.last() != m_batteryInfo->time_to_full.previous()) {
+            emit timeUntilFullChanged();
+        }
+        if (m_batteryInfo->time_to_low.last() != m_batteryInfo->time_to_low.previous()) {
+            emit timeUntilLowChanged();
         }
     }
 }

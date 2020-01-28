@@ -9,8 +9,9 @@ Source0: %{name}-%{version}.tar.bz2
 Obsoletes: contextkit-declarative-qt5
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Qml)
-Requires: nemo-qml-plugin-dbus
-Requires: nemo-qml-plugin-mce
+BuildRequires: ssu-sysinfo-devel
+Requires: nemo-qml-plugin-dbus-qt5
+Requires: libmce-qt5-declarative
 Requires: kf5bluezqt-bluez5-declarative
 Requires: libqofono-qt5-declarative
 Requires: connman-qt5-declarative

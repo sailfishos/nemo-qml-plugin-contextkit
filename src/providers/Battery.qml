@@ -27,54 +27,54 @@ ContextPropertyBase {
     id: root
 
     propertyValue: {
-    switch (propertyName) {
-    case "ChargePercentage":
-        return mceBatteryLevel.percent
-    case "Capacity":
-        return batteryContext.capacity
-    case "Energy":
-        return batteryContext.energy
-    case "EnergyFull":
-        return batteryContext.energyFull
-    case "OnBattery":
-        return !mceCableState.connected
-    case "LowBattery":
-        return mceBatteryStatus.status === MceBatteryStatus.Low
-    case "TimeUntilLow":
-        // TODO
-        return -1
-    case "TimeUntilFull":
-        // TODO
-        return -1
-    case "IsCharging":
-        return mceBatteryState === MceBatteryState.Charging
-    case "Temperature":
-        return batteryContext.temperature
-    case "Power":
-        // TODO
-        return -1
-    case "State":
-        if (mceBatteryState.value === MceBatteryState.Discharging) {
-            return mceBatteryStatus.status === MceBatteryStatus.Ok
-                    ? "discharging"
-                    : mceBatteryStatus.text
-        } else {
+        switch (propertyName) {
+        case "ChargePercentage":
+            return mceBatteryLevel.percent
+        case "Capacity":
+            return batteryContext.capacity
+        case "Energy":
+            return batteryContext.energy
+        case "EnergyFull":
+            return batteryContext.energyFull
+        case "OnBattery":
+            return !mceCableState.connected
+        case "LowBattery":
+            return mceBatteryStatus.status === MceBatteryStatus.Low
+        case "TimeUntilLow":
+            return batteryContext.timeUntilLow
+        case "TimeUntilFull":
+            return batteryContext.timeUntilFull
+        case "IsCharging":
+            return mceBatteryState === MceBatteryState.Charging
+        case "Temperature":
+            return batteryContext.temperature
+        case "Power":
+            return batteryContext.power
+        case "State":
+            switch (mceBatteryStatus.status) {
+            case MceBatteryStatus.Full:
+                return "full"
+            case MceBatteryStatus.Low:
+                return "low"
+            case MceBatteryStatus.Empty:
+                return "empty"
+            default:
+                return mceBatteryState.text
+            }
+        case "Voltage":
+            return batteryContext.voltage
+        case "Current":
+            return batteryContext.current
+        case "Level":
+            return mceBatteryStatus.text
+        case "ChargerType":
+            return mceChargerType.text
+        case "ChargingState":
             return mceBatteryState.text
-        }
-    case "Voltage":
-        return batteryContext.voltage
-    case "Current":
-        return batteryContext.current
-    case "Level":
-        return mceBatteryStatus.text
-    case "ChargerType":
-        return mceChargerType.text
-    case "ChargingState":
-        return mceBatteryState.text
 
-    default:
-        return undefined
-    }
+        default:
+            return undefined
+        }
     }
 
     BatteryContextPropertyProvider {
@@ -98,9 +98,9 @@ ContextPropertyBase {
                 case MceBatteryState.Discharging:
                     return "discharging"
                 case MceBatteryState.NotCharging:
-                    return "not charging"
+                    return "unknown"
                 case MceBatteryState.Full:
-                    return "full"
+                    return "idle"
                 }
             }
             return "unknown"
@@ -114,7 +114,6 @@ ContextPropertyBase {
             if (valid) {
                 switch (status) {
                 case MceBatteryStatus.Full:
-                    return "full"
                 case MceBatteryStatus.Ok:
                     return "normal"
                 case MceBatteryStatus.Low:

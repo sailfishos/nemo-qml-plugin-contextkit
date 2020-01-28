@@ -136,9 +136,9 @@ ContextPropertyBase {
         return _getConnectionManager().attached
 
     case "CapabilityVoice":
-        return telephonySimManager.defaultVoiceModem.length > 0
+        return telephonySimManager.availableModems.length > 0
     case "CapabilityData":
-        return telephonySimManager.defaultDataModem.length > 0
+        return telephonySimManager.availableModems.length > 0
     case "CallCount":
         return _getVoiceCallManager().calls.length
 

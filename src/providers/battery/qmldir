@@ -1,0 +1,2 @@
+module org.freedesktop.contextkit.providers.battery
+plugin contextkitbatteryprovider

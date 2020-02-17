@@ -1,8 +1,5 @@
 /*
- * ContextKit property QML binding
- *
- * Copyright (C) 2012 Jolla Ltd.
- * Contact: Denis Zalevskiy <denis.zalevskiy@jollamobile.com>
+ * Copyright (c) 2020 Open Mobile Platform LLC.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,22 +19,26 @@
  * http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 
-#include "ck_property.hpp"
+#include <QtQml/qqml.h>
+#include <QtQml/QQmlEngine>
+#include <QtQml/QQmlExtensionPlugin>
 
-#include <QtDeclarative/qdeclarative.h>
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
-
-namespace ContextKitQml
+class ContextKitPlugin : public QQmlExtensionPlugin
 {
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.freedesktop.contextkit")
 
-class Plugin : public QDeclarativeExtensionPlugin
-{
 public:
+    void initializeEngine(QQmlEngine *engine, const char *uri)
+    {
+        Q_UNUSED(engine)
+        Q_UNUSED(uri)
+    }
+
     void registerTypes(char const* uri) {
-        qmlRegisterType<Property>(uri, 1, 0, "ContextProperty");
+        Q_ASSERT(QLatin1String(uri) == QLatin1String("org.freedesktop.contextkit"));
     }
 };
 
-}
+#include "plugin.moc"
 
-Q_EXPORT_PLUGIN2(org.freedesktop.contextkit, ContextKitQml::Plugin);

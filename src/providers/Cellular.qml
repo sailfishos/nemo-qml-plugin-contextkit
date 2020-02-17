@@ -1,8 +1,5 @@
 /*
- * ContextKit property QML binding
- *
- * Copyright (C) 2012 Jolla Ltd.
- * Contact: Denis Zalevskiy <denis.zalevskiy@jollamobile.com>
+ * Copyright (c) 2020 Open Mobile Platform LLC.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,16 +19,9 @@
  * http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 
-#include "plugin-qt5.hpp"
-#include "ck_property.hpp"
+import org.freedesktop.contextkit 1.0
+import "ofono"
 
-#include <qqml.h>
-
-namespace ContextKitQml
-{
-
-void Plugin::registerTypes(char const* uri) {
-    qmlRegisterType<Property>(uri, 1, 0, "ContextProperty");
-}
-
+CellularBase {
+    modemPath: telephonySimManager.availableModems[0] || ""
 }

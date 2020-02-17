@@ -6,7 +6,7 @@ License: LGPLv2
 URL: https://git.sailfishos.org/mer-core/nemo-qml-plugin-contextkit
 Source0: %{name}-%{version}.tar.bz2
 
-Obsoletes: contextkit-declarative-qt5
+Provides: contextkit-declarative-qt5
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Gui)
 BuildRequires: pkgconfig(Qt5Qml)

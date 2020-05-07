@@ -13,7 +13,7 @@ BuildRequires: pkgconfig(Qt5Qml)
 BuildRequires: ssu-sysinfo-devel
 Requires: nemo-qml-plugin-dbus-qt5
 Requires: libmce-qt5-declarative
-Requires: kf5bluezqt-bluez5-declarative
+Requires: kf5bluezqt-declarative
 Requires: libqofono-qt5-declarative
 Requires: connman-qt5-declarative
 Requires: qt5-qtdeclarative-import-sensors

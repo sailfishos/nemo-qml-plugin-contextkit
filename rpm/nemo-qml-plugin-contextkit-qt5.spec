@@ -2,8 +2,8 @@ Summary: ContextKit QML bindings
 Name: nemo-qml-plugin-contextkit-qt5
 Version: 2.0
 Release: 2
-License: LGPLv2
-URL: https://git.sailfishos.org/mer-core/nemo-qml-plugin-contextkit
+License: LGPLv2+
+URL: https://github.com/sailfishos/nemo-qml-plugin-contextkit
 Source0: %{name}-%{version}.tar.bz2
 
 Provides: contextkit-declarative-qt5
@@ -30,10 +30,10 @@ Requires: qt5-qtdeclarative-import-sensors
 make %{?_smp_mflags}
 
 %install
-rm -rf %{buildroot}
 %qmake5_install
 
 %files
 %defattr(-,root,root,-)
+%license LICENSE LICENSE.LGPL
 %{_libdir}/qt5/qml/org/freedesktop/contextkit
 %{_datadir}/contextkit/providers

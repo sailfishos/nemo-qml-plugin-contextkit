@@ -20,8 +20,8 @@
  */
 
 import QtQml 2.2
-import MeeGo.QOfono 0.2
-import MeeGo.Connman 0.2
+import QOfono 0.2
+import Connman 0.2
 import Nemo.DBus 2.0
 import Sailfish.Telephony 1.0
 import org.freedesktop.contextkit 1.0

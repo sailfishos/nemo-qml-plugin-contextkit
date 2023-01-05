@@ -19,7 +19,7 @@
  * http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 
-import MeeGo.Connman 0.2
+import Connman 0.2
 import org.freedesktop.contextkit 1.0
 
 ContextPropertyBase {

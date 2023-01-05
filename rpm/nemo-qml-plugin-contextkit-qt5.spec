@@ -15,8 +15,8 @@ BuildRequires: ssu-sysinfo-devel
 Requires: nemo-qml-plugin-dbus-qt5
 Requires: libmce-qt5-declarative
 Requires: kf5bluezqt-declarative
-Requires: libqofono-qt5-declarative
-Requires: connman-qt5-declarative
+Requires: libqofono-qt5-declarative >= 0.117
+Requires: connman-qt5-declarative >= 1.3.0
 Requires: qt5-qtdeclarative-import-sensors
 
 %description

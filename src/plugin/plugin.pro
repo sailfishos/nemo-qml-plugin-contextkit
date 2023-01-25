@@ -9,6 +9,7 @@ target.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
 INSTALLS += target
 
 qmlmodule.files += \
+    plugins.qmltypes \
     qmldir \
     ContextProperty.qml \
     ContextPropertyBase.qml
@@ -23,3 +24,6 @@ HEADERS += \
 SOURCES += \
     plugin.cpp
 
+qmltypes.commands = qmlplugindump -nonrelocatable \
+         org.freedesktop.contextkit 1.0 > $$PWD/plugins.qmltypes
+QMAKE_EXTRA_TARGETS += qmltypes

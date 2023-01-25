@@ -11,6 +11,7 @@ target.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
 INSTALLS += target
 
 qmlmodule.files += \
+    plugins.qmltypes \
     qmldir
 qmlmodule.path += $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
 INSTALLS += qmlmodule
@@ -27,3 +28,6 @@ SOURCES += \
     provider_power_udev.cpp \
     plugin.cpp
 
+qmltypes.commands = qmlplugindump -nonrelocatable \
+         org.freedesktop.contextkit.providers.battery 1.0 > $$PWD/plugins.qmltypes
+QMAKE_EXTRA_TARGETS += qmltypes
